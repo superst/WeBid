@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright          : (C) 2008 - 2016 WeBid
+ *   copyright          : (C) 2008 - 2017 WeBid
  *   site               : http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -37,4 +37,3 @@ function recaptcha_check_answer($privkey, $challenge)
 	$response = $recaptcha->verify($challenge);
 	return $response->isSuccess();
 }
-?>

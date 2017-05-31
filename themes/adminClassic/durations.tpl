@@ -7,9 +7,7 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_5142}&nbsp;&gt;&gt;&nbsp;{L_069}</h4>
 				<form name="durations" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
+					{L_122}
 					<table width="98%" cellpadding="0" cellspacing="0" class="blank">
 						<tr>
 							<th>&nbsp;</th>
@@ -20,9 +18,9 @@
 <!-- BEGIN dur -->
 						<tr>
 							<td>&nbsp;</td>
-							<td><input type="text" name="new_days[{dur.ID}]" value="{dur.DAYS}" size="5"></td>
-							<td><input type="text" name="new_durations[{dur.ID}]" value="{dur.DESC}" size="25"></td>
-							<td align="center"><input type="checkbox" name="delete[]" value="{dur.ID}"></td>
+							<td><input type="text" name="new_days[{dur.S_ROW_COUNT}]" value="{dur.DAYS}" size="5"></td>
+							<td><input type="text" name="new_durations[{dur.S_ROW_COUNT}]" value="{dur.DESC}" size="25"></td>
+							<td align="center"><input type="checkbox" name="delete[]" value="{dur.S_ROW_COUNT}"></td>
 						</tr>
 <!-- END dur -->
 						<tr>

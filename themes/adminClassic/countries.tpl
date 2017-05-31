@@ -7,9 +7,6 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_5142}&nbsp;&gt;&gt;&nbsp;{L_081}</h4>
 				<form name="payments" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<div class="plain-box">
 						<p>{L_094}</p>
 						<p><img src="../images/nodelete.gif" width="20" height="21" style="vertical-align:middle;"> {L_2__0030}</p>
@@ -27,7 +24,13 @@
 								<input type="text" name="new_countries[]" size="45" value="{countries.COUNTRY}">
 								<input type="hidden" name="old_countries[]" value="{countries.COUNTRY}">
 							</td>
-							<td align="center">{countries.SELECTBOX}</td>
+							<td align="center">
+	<!-- IF countries.B_CAN_DELETE -->
+								<input type="checkbox" name="delete[]" value="{countries.COUNTRY}">
+	<!-- ELSE -->
+								<img src="../images/nodelete.gif" alt="{L_cannot_delete}">
+	<!-- ENDIF -->
+							</td>
 						</tr>
 <!-- END countries -->
 						<tr>

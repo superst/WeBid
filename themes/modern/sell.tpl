@@ -92,18 +92,18 @@ $(document).ready(function(){
 		}
 		else
 		{
-			for (var i = 0; i < setup.length; i++)
+			for (var i = 0; i < setup_fee.length; i++)
 			{
-				if (setup[i][0] <= min_bid && setup[i][1] >= min_bid)
+				if (setup_fee[i][0] <= min_bid && setup_fee[i][1] >= min_bid)
 				{
-					if (setup[i][3] == 'flat')
+					if (setup_fee[i][3] == 'flat')
 					{
-						min_bid_fee = setup[i][2];
-						updatefee(setup[i][2]);
+						min_bid_fee = setup_fee[i][2];
+						updatefee(setup_fee[i][2]);
 					}
 					else
 					{
-						min_bid_fee = (setup[i][2] / 100) * min_bid;
+						min_bid_fee = (setup_fee[i][2] / 100) * min_bid;
 						updatefee(min_bid_fee);
 					}
 					break;
@@ -197,8 +197,9 @@ $(document).ready(function(){
 	});
 		<!-- ENDIF -->
 	function updatefee(newfee) {
-		var nowfee = parseFloat($("#fee_exact").val()) + newfee - current_fee;
+		var nowfee = parseFloat($("#fee_exact").val()) + newfee;
 		$("#fee_exact").val(nowfee);
+		nowfee = nowfee - current_fee;
 		if (nowfee < 0)
 		{
 			nowfee = 0;
@@ -320,11 +321,11 @@ $(document).ready(function(){
 						<div class="radio">
 							<label class="radio-inline">
 								<input type="radio" name="with_reserve" id="with_reserve_no" value="no" {RESERVE_N}>
-								{L_029}
+								{L_no}
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="with_reserve" id="with_reserve_yes" value="yes" {RESERVE_Y}>
-								{L_030}
+								{L_yes}
 							</label>
 						</div>
 						<input type="text" name="reserve_price" id="reserve_price" class="form-control" value="{RESERVE}" {BN_ONLY}>
@@ -336,11 +337,11 @@ $(document).ready(function(){
 						<div class="radio">
 							<label class="radio-inline">
 								<input type="radio" name="buy_now_only" value="0" {BN_ONLY_N} id="bn_only_no">
-								{L_029}
+								{L_no}
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="buy_now_only" value="1" {BN_ONLY_Y} id="bn_only_yes">
-								{L_030}
+								{L_yes}
 							</label>
 						</div>
 					</div>
@@ -351,11 +352,11 @@ $(document).ready(function(){
 						<div class="radio">
 							<label class="radio-inline">
 								<input type="radio" name="buy_now" id="bn_no" value="no" {BN_N}>
-								{L_029}
+								{L_no}
 							</label>
 							<label class="radio-inline">
 								<input type="radio" name="buy_now" id="bn_yes" value="yes" {BN_Y}>
-								{L_030}
+								{L_yes}
 							</label>
 						</div>
 						<input type="text" name="buy_now_price" id="bn" class="form-control" value="{BN_PRICE}">
@@ -365,7 +366,7 @@ $(document).ready(function(){
 	<!-- IF B_EDIT_STARTTIME -->
 					<div class="form-group col-md-12">
 						<label for="a_starts">{L_2__0016}</label>
-		<!-- IF B_EDITING -->
+		<!-- IF B_EDITING && B_CANEDITSTARTDATE eq false -->
 						{START_TIME}
 						<input type="hidden" name="a_starts" value="{START_TIME}">
 		<!-- ELSE -->
@@ -387,10 +388,29 @@ $(document).ready(function(){
 	<!-- ELSE -->
 					<input type="hidden" name="start_now" value="1">
 	<!-- ENDIF -->
+	<!-- IF B_EDIT_ENDTIME -->
 					<div class="form-group col-md-12">
-						<label>{L_022}</label>
+						<label>{L_custom_end_time}</label>
 						<div class="row">
-							<div class="duration col-md-4">{DURATIONS}</div>
+							<div class="duration col-md-4"><input type="checkbox" name="custom_end" {CUSTOM_END}></div>
+						</div>
+					</div>
+	<!-- ENDIF -->
+					<div class="form-group col-md-12">
+						<label>{L_ending_date}</label>
+						<div class="row">
+							<div class="duration col-md-4">
+	        					{L_022}: {DURATIONS}<br>
+				<!-- IF B_EDIT_ENDTIME -->
+								{L_or_custom_end_time}: <input type="text" name="a_ends" id="a_ends" value="{END_TIME}" size="20" maxlength="19" class="form-control">
+								<script type="text/javascript">
+									new tcal ({'id': 'a_ends','controlname': 'a_ends', 'formname': 'sell'});
+									$('#a_ends').change(function () {
+										$('#custom_end').attr('checked', true);
+									});
+								</script>
+				<!-- ENDIF -->
+							</div>
 						</div>
 					</div>
 	<!-- IF B_AUTORELIST -->
@@ -457,7 +477,7 @@ $(document).ready(function(){
 					<div class="form-group col-md-12">
 						<label>{L_026}</label>
 						<div class="checkbox">
-							<label>{PAYMENTS}</label>
+							{PAYMENTS}
 						</div>
 					</div>
 					<legend>{L_268}</legend>
@@ -481,10 +501,10 @@ $(document).ready(function(){
 						<label>{L_1102}</label>
 						<div class="radio">
 							<label class="radio-inline">
-								<input type="radio" name="is_taxed" value="1" {TAX_Y}>	{L_030}
+								<input type="radio" name="is_taxed" value="1" {TAX_Y}>	{L_yes}
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="is_taxed" value="0" {TAX_N}> {L_029}
+								<input type="radio" name="is_taxed" value="0" {TAX_N}> {L_no}
 							</label>
 						</div>
 					</div>
@@ -492,10 +512,10 @@ $(document).ready(function(){
 						<label>{L_1103}</label>
 						<div class="radio">
 							<label class="radio-inline">
-								<input type="radio" name="tax_included" value="1" {TAXINC_Y}>	{L_030}
+								<input type="radio" name="tax_included" value="1" {TAXINC_Y}>	{L_yes}
 							</label>
 							<label class="radio-inline">
-								<input type="radio" name="tax_included" value="0" {TAXINC_N}> {L_029}
+								<input type="radio" name="tax_included" value="0" {TAXINC_N}> {L_no}
 							</label>
 						</div>
 					</div>
@@ -584,10 +604,17 @@ $(document).ready(function(){
 							<td valign="top" align="right"><b>{L_2__0016}</b></td>
 							<td>{STARTDATE}</td>
 						</tr>
+		<!-- IF CUSTOM_END -->
+						<tr>
+							<td valign="top" align="right"><b>{L_end_date}</b></td>
+							<td>{END_TIME}</td>
+						</tr>
+		<!-- ELSE -->
 						<tr>
 							<td valign="top" align="right"><b>{L_022}</b></td>
 							<td>{DURATION}</td>
 						</tr>
+		<!-- ENDIF -->
 	<!-- IF B_CUSINC -->
 						<tr>
 							<td valign="top" align="right"><b>{L_120}</b> </td>
@@ -633,11 +660,11 @@ $(document).ready(function(){
 						</tr>
 	<!-- IF B_USERAUTH -->
 						<tr>
-							<td align="right">{L_003}</td>
+							<td align="right">{L_username}</td>
 							<td><b>{YOURUSERNAME}</b><input type="hidden" name="nick" value="{YOURUSERNAME}">
 						</tr>
 						<tr>
-							<td align="right">{L_004}</td>
+							<td align="right">{L_password}</td>
 							<td><input type="password" name="password" class="form-control" value=""></td>
 						</tr>
 	<!-- ENDIF -->

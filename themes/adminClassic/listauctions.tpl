@@ -14,17 +14,21 @@
 					<th align="left"><b>{L_297}</b></th>
 				<tr>
 				<!-- BEGIN auctions -->
-				<tr {auctions.BG}>
+				<tr<!-- IF auctions.S_ROW_COUNT % 2 == 1 --> class="bg"<!-- ENDIF -->>
 					<td>
-						<!-- IF auctions.SUSPENDED eq 1 -->
+						<!-- IF auctions.SUSPENDED > 0 -->
 						<span style="color:#FF0000">{auctions.TITLE}</span>
 						<!-- ELSE -->
-						{auctions.TITLE}
+							<!-- IF auctions.TIMESREPORTED > 0 -->
+							<span style="color:#FFA500">{auctions.TITLE}</span>
+							<!-- ELSE -->
+							{auctions.TITLE}
+							<!-- ENDIF -->
 						<!-- ENDIF -->
 						<p>[ <a href="{SITEURL}item.php?id={auctions.ID}" target="_blank">{L_5295}</a> ]</p>
 					</td>
 					<td>
-						<b>{L_003}:</b> {auctions.USERNAME}<br>
+						<b>{L_username}:</b> {auctions.USERNAME}<br>
 						<b>{L_625}:</b> {auctions.START_TIME}<br>
 						<b>{L_626}:</b> {auctions.END_TIME}<br>
 						<b>{L_041}:</b> {auctions.CATEGORY}
@@ -39,6 +43,9 @@
 						{L_310}
 					<!-- ENDIF -->
 						</a>
+					<!-- IF auctions.IN_MODERATION_QUEUE -->
+						<br><a href="removefrommoderation.php?id={auctions.ID}&offset={PAGE}">{L_moderator_dismiss}</a>
+					<!-- ENDIF -->
 					<!-- IF auctions.B_HASWINNERS -->
 						<br><a href="viewwinners.php?id={auctions.ID}&offset={PAGE}">{L__0163}</a>
 					<!-- ENDIF -->

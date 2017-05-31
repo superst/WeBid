@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -12,51 +12,40 @@
  *   sold. If you have been sold this script, get a refund.
  ***************************************************************************/
 
-/***************************************************************************
- *   Script based on popular MOD "Logo Upload Via Admin" by nay27uk
- ***************************************************************************/
-
 define('InAdmin', 1);
 $current_page = 'interface';
 include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-unset($ERR);
-if (isset($_POST['action']) && $_POST['action'] == "update") {
-	if (isset($_FILES['logo']['tmp_name']) && !empty($_FILES['logo']['tmp_name'])) {
-		// Handle logo upload
-		$inf = GetImageSize ($_FILES['logo']['tmp_name']);
-		if ($inf[2] < 1 || $inf[2] > 3) {
-			print $ERR_602;
-			exit;
-		}
-		if (!empty($_FILES['logo']['tmp_name']) && $_FILES['logo']['tmp_name'] != "none") {
-			if ($system->move_file($_FILES['logo']['tmp_name'], MAIN_PATH . 'uploaded/logo/'  . $_FILES['logo']['name'])) {
-				$LOGOUPLOADED = true;
-			} else {
-				$LOGOUPLOADED = false;
-			}
-		}
-	}
-	$v = $_FILES['logo']['name'];
-		$params = array();
-	$params[] = array(':logo', $v , 'str');
-	
-	$query = " UPDATE " . $DBPrefix . "settings SET logo = :logo ";
-	$db->query($query,$params);
-		
-	$system->SETTINGS['logo'] = $_FILES['logo']['name'];
+if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    if (isset($_FILES['logo']['tmp_name']) && !empty($_FILES['logo']['tmp_name'])) {
+        // Handle logo upload
+        $inf = GetImageSize($_FILES['logo']['tmp_name']);
+        if ($inf[2] < 1 || $inf[2] > 3) {
+            $template->assign_block_vars('alerts', array('TYPE' => 'error', 'MESSAGE' => $ERR_602));
+        } elseif (!empty($_FILES['logo']['tmp_name']) && $_FILES['logo']['tmp_name'] != "none") {
+            if (move_uploaded_file($_FILES['logo']['tmp_name'], UPLOAD_PATH . 'logo/' . $_FILES['logo']['name'])) {
+                $system->writesetting("logo", $_FILES['logo']['name'], "str");
+            } else {
+                $template->assign_block_vars('alerts', array('TYPE' => 'error', 'MESSAGE' => $MSG['upload_failed']));
+            }
+        }
+    }
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['logo_upload_success']));
 }
+
 $logoURL = $system->SETTINGS['siteurl'] . 'uploaded/logo/' . $system->SETTINGS['logo'];
-loadblock($MSG['531'], $MSG['556'], 'image', 'logo', $system->SETTINGS['logo']);
-loadblock('', $MSG['602'], 'upload', 'logo', $system->SETTINGS['logo']);
+loadblock($MSG['your_logo'], $MSG['current_logo'], 'image', 'logo', $system->SETTINGS['logo']);
+loadblock('', $MSG['upload_new_logo'], 'upload', 'logo', $system->SETTINGS['logo']);
+
 $template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : '',
-		'SITEURL' => $system->SETTINGS['siteurl'],
-		'IMAGEURL' => $logoURL,
-		));
+        'SITEURL' => $system->SETTINGS['siteurl'],
+        'IMAGEURL' => $logoURL,
+        ));
+include 'header.php';
 $template->set_filenames(array(
-		'body' => 'logo_upload.tpl'
-		));
+        'body' => 'logo_upload.tpl'
+        ));
 $template->display('body');
+include 'footer.php';

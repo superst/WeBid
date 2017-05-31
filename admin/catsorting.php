@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -18,31 +18,26 @@ include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-unset($ERR);
+if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    // clean submission and update database
+    $system->writesetting("catsorting", $system->cleanvars($_POST['catsorting']), "str");
+    $system->writesetting("catstoshow", $_POST['catstoshow'], "int");
 
-if (isset($_POST['action']) && $_POST['action'] == 'update')
-{
-	// clean submission and update database
-	$system->writesetting("catsorting", $system->cleanvars($_POST['catsorting']), "str");
-	$system->writesetting("catstoshow", intval($_POST['catstoshow']),"int");
-
-	$ERR = $MSG['25_0150'];
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['category_sorting_updated']));
 }
 
-loadblock('', $MSG['25_0147'], 'sortstacked', 'catsorting', $system->SETTINGS['catsorting'], array($MSG['25_0148'], $MSG['25_0149']));
-loadblock($MSG['30_0030'], $MSG['30_0029'], 'percent', 'catstoshow', $system->SETTINGS['catstoshow']);
+loadblock('', $MSG['category_sorting_explain'], 'sortstacked', 'catsorting', $system->SETTINGS['catsorting'], array($MSG['category_sorting_alpha'], $MSG['category_sorting_count']));
+loadblock($MSG['categories_to_show'], $MSG['categories_to_show_explain'], 'percent', 'catstoshow', $system->SETTINGS['catstoshow']);
 
 $template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : '',
-		'SITEURL' => $system->SETTINGS['siteurl'],
-		'TYPENAME' => $MSG['25_0008'],
-		'PAGENAME' => $MSG['25_0146']
-		));
+        'SITEURL' => $system->SETTINGS['siteurl'],
+        'TYPENAME' => $MSG['25_0008'],
+        'PAGENAME' => $MSG['category_sorting']
+        ));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'adminpages.tpl'
-		));
+        'body' => 'adminpages.tpl'
+        ));
 $template->display('body');
 include 'footer.php';
-?>

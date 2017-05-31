@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -17,85 +17,72 @@ $current_page = 'settings';
 include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
-include INCLUDE_PATH . 'functions_rebuild.php';
 
-unset($ERR);
+if (isset($_POST['act'])) {
+    // remove any countries that need to be
+    if (isset($_POST['delete']) && count($_POST['delete']) > 0) {
+        // we use a single SQL query to quickly do ALL our deletes
+        $query = "DELETE FROM " . $DBPrefix . "countries WHERE ";
+        $params = array();
 
-if (isset($_POST['act']))
-{
-	// remove any countries that need to be
-	if (isset($_POST['delete']) && count($_POST['delete']) > 0)
-	{
-		// we use a single SQL query to quickly do ALL our deletes
-		$query = "DELETE FROM " . $DBPrefix . "countries WHERE ";
-		$params = array();
+        // if this is the first country being deleted it don't
+        // precede it with an " or " in the SQL string
+        for ($i = 0; $i < count($_POST['delete']); $i++) {
+            if ($i > 0) {
+                $query .= " OR ";
+            }
+            $query .= "country = :country" . $i;
+            $params[] = array(':country' . $i, $_POST['delete'][$i], 'str');
+        }
+        $db->query($query, $params);
+    }
 
-		// if this is the first country being deleted it don't
-		// precede it with an " or " in the SQL string
-		for ($i = 0; $i < count($_POST['delete']); $i++)
-		{
-			if ($i > 0)
-			{
-				$query .= " OR ";
-			}
-			$query .= "country = :country" . $i;
-			$params[] = array(':country' . $i, $system->cleanvars($_POST['delete'][$i]), 'str');
-		}
-		$db->query($query, $params);
-	}
+    //update countries with new names
+    for ($i = 0; $i < count($_POST['old_countries']); $i++) {
+        if ($_POST['old_countries'][$i] != $_POST['new_countries'][$i]) {
+            $query = "UPDATE " . $DBPrefix . "countries SET
+                      country = :country_new
+                      WHERE country = :country_old";
+            $params = array();
+            $params[] = array(':country_new', $_POST['new_countries'][$i], 'str');
+            $params[] = array(':country_old', $_POST['old_countries'][$i], 'str');
+            $db->query($query, $params);
+        }
+    }
 
-	//update countries with new names
-	for ($i = 0; $i < count($_POST['old_countries']); $i++)
-	{
-		if ($_POST['old_countries'][$i] != $_POST['new_countries'][$i])
-		{
-			$query = "UPDATE " . $DBPrefix . "countries SET
-					country = :country_new
-					WHERE country = :country_old";
-			$params = array();
-			$params[] = array(':country_new', $system->cleanvars($_POST['new_countries'][$i]), 'str');
-			$params[] = array(':country_old', $system->cleanvars($_POST['old_countries'][$i]), 'str');
-			$db->query($query, $params);
-		}
-	}
+    // If a new country was added, insert it into database
+    if (!empty($_POST['new_countries'][(count($_POST['new_countries']) - 1)])) {
+        $query = "INSERT INTO " . $DBPrefix . "countries (country) VALUES (:country)";
+        $params = array();
+        $params[] = array(':country', $_POST['new_countries'][(count($_POST['new_countries']) - 1)], 'str');
+        $db->query($query, $params);
+    }
 
-	// If a new country was added, insert it into database
-	if (!empty($_POST['new_countries'][(count($_POST['new_countries']) - 1)]))
-	{
-		$query = "INSERT INTO " . $DBPrefix . "countries (country) VALUES (:country)";
-		$params = array();
-		$params[] = array(':country', $system->cleanvars($_POST['new_countries'][(count($_POST['new_countries']) - 1)]), 'str');
-		$db->query($query, $params);
-	}
-	rebuild_html_file('countries');
-	$ERR = $MSG['1028'];
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['countries_updated']));
 }
 
-include MAIN_PATH . 'language/' . $language . '/countries.inc.php';
+$query = "SELECT country_id, c.country, count(u.id) AS user_count
+          FROM " . $DBPrefix . "countries c
+          LEFT JOIN " . $DBPrefix . "users u ON (c.country = u.country)
+          GROUP BY country_id, c.country";
+$db->direct_query($query);
+$countries = $db->fetchall();
 
-foreach($countries as $country) {
-	// check if the country is being used by a user
-	$query = "SELECT id FROM " . $DBPrefix . "users WHERE country = :country LIMIT 1";
-	$params = array();
-	$params[] = array(':country', $country, 'str');
-	$db->query($query, $params);
-	$USEDINUSERS = $db->numrows();
+foreach ($countries as $country) {
+    $can_delete = true;
+    if ($country['user_count'] != 0 || $country['country'] == $system->SETTINGS['defaultcountry']) {
+        $can_delete = false;
+    }
 
-	$template->assign_block_vars('countries', array(
-			'COUNTRY' => $country,
-			'SELECTBOX' => ($USEDINUSERS == 0) ? '<input type="checkbox" name="delete[]" value="' . $country . '">' : '<img src="../images/nodelete.gif" alt="You cannot delete this">'
-			));
+    $template->assign_block_vars('countries', array(
+            'COUNTRY' => $country['country'],
+            'B_CAN_DELETE' => $can_delete
+            ));
 }
-
-$template->assign_vars(array(
-		'ERROR' => isset($ERR) ? $ERR : ''
-		));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'countries.tpl'
-		));
+        'body' => 'countries.tpl'
+        ));
 $template->display('body');
-
 include 'footer.php';
-?>

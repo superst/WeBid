@@ -20,7 +20,7 @@
 					</tr>
 					<tr>
 						<td align=right width="50%"><b>{L_125} :</b></td>
-						<td>{SELLER} {SELLERNUMFBS} {FBICON}</td>
+						<td>{SELLER} {SELLERNUMFBS} <!-- IF FB_ICON ne '' --><img src="{SITEURL}images/icons/{FB_ICON}" alt="{FB_ICON}" class="fbstar"><!-- ENDIF --></td>
 					</tr>
 					<tr>
 						<td align="right" width="40%"><b>{L_497}:</b></td>
@@ -41,14 +41,14 @@
 						</td>
 					</tr>
 					<tr>
-						<td align="right">{L_003}</td>
+						<td align="right">{L_username}</td>
 						<td>
 							<b>{YOURUSERNAME}</b>
 						</td>
 					</tr>
 	<!-- IF B_USERAUTH -->
 					<tr>
-						<td align="right">{L_004}</td>
+						<td align="right">{L_password}</td>
 						<td>
 							<input type="password" name="password" size="15" maxlength="15">
 						</td>
@@ -61,14 +61,14 @@
 				</div>
 			</form>
 <!-- ELSE -->
-			<table>
+			<table width="100%">
 				<tr>
-					<td align="right" width="40%"><b>{L_893}:</b></td>
+					<td align="right" width="50%"><b>{L_893}:</b></td>
 					<td>{BN_TOTAL}</td>
 				</tr>
 	<!-- IF SHIPPINGCOST ne 0 -->
 				<tr>
-					<td align="right" width="40%"><b>{L_023}:</b></td>
+					<td align="right" width="50%"><b>{L_023}:</b></td>
 					<td>{SHIPPINGCOST}</td>
 				</tr>
 	<!-- ENDIF -->

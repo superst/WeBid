@@ -7,9 +7,6 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0010}&nbsp;&gt;&gt;&nbsp;{L_045}&nbsp;&gt;&gt;&nbsp;{L_511}</h4>
 				<form name="errorlog" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<table width="98%" celpadding="0" cellspacing="0" class="blank">
 					<tr>
 						<td width="204">{L_302} *</td>
@@ -17,10 +14,12 @@
 						<td><b>{L_448}</b></td>
 					</tr>
 					<tr>
-						<td>{L_003}</td>
+						<td>{L_username}</td>
 						<td>{USERNAME}</td>
 						<td rowspan="15" width="33%" valign="top">
-							{USERGROUPS}
+						<!-- BEGIN usergroups -->
+							<p><input type="checkbox" name="group[]" value="{usergroups.ID}"<!-- IF usergroups.B_SELECTED --> checked="true"<!-- ENDIF -->> {usergroups.NAME}</p>
+						<!-- END usergroups -->
 						</td>
 					</tr>
 					<tr class="bg">
@@ -28,11 +27,11 @@
 						<td><small>{L_243}</small></td>
 					</tr>
 					<tr class="bg">
-						<td>{L_004} *</td>
+						<td>{L_password} *</td>
 						<td><input type="password" name="password" size="20" maxlength="20"></td>
 					</tr>
 					<tr class="bg">
-						<td>{L_004} *</td>
+						<td>{L_password} *</td>
 						<td><input type="password" name="repeat_password" size="20" maxlength="20"></td>
 					</tr>
 					<tr>
@@ -64,7 +63,9 @@
 						<td>
 							<select name="country">
 								<option value=""></option>
-								{COUNTRY_LIST}
+								<!-- BEGIN countries -->
+									<option value="{countries.COUNTRY}"<!-- IF countries.B_SELECTED --> selected="true"<!-- ENDIF -->>{countries.COUNTRY}</option>
+								<!-- END countries -->
 							</select>
 						</td>
 					</tr>
@@ -84,8 +85,6 @@
 					<input type="hidden" name="id" value="{ID}">
 					<input type="hidden" name="offset" value="{OFFSET}">
 					<input type="hidden" name="action" value="update">
-					<input type="hidden" name="idhidden" value="{ID}">
-					<input type="hidden" name="mode" value="{MODE}">
 					<input type="hidden" name="csrftoken" value="{_CSRFTOKEN}">
 					<input type="submit" name="act" class="centre" value="{L_071}">
 				</form>

@@ -6,15 +6,12 @@
 		<div style="width:75%; float:right;">
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0010}&nbsp;&gt;&gt;&nbsp;{L_045}&nbsp;&gt;&gt;&nbsp;{L_222}</h4>
-<!-- IF ERROR ne '' -->
-				<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 				<table width="98%" cellpadding="0" cellspacing="0" class="blank">
 					<tr>
-						<td align="right" colspan="2"><b>{NICK} ({FB_NUM}) {FB_IMG}</b></td>
+						<td align="right" colspan="2"><b>{NICK} ({FB_NUM}) <!-- IF FB_ICON ne '' --><img src="{SITEURL}images/icons/{FB_ICON}" alt="{FB_ICON}" class="fbstar"><!-- ENDIF --></b></td>
 					</tr>
 <!-- BEGIN feedback -->
-					<tr {feedback.BG}>
+					<tr<!-- IF feedback.S_ROW_COUNT % 2 == 1 --> class="bg"<!-- ENDIF -->>
 						<td>
 							<img align="middle" src="{SITEURL}images/{feedback.FB_TYPE}.png">&nbsp;&nbsp;<b>{feedback.FB_FROM}</b>&nbsp;&nbsp;<span class="small">({L_506}{feedback.	FB_TIME})</span>
 							<p>{feedback.FB_MSG}</p>

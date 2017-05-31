@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -18,32 +18,27 @@ include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-if (isset($_POST['action']) && $_POST['action'] == 'update')
-{
-	if (is_dir(MAIN_PATH . 'cache'))
-	{
-		$dir = opendir(MAIN_PATH . 'cache');
-		while (($myfile = readdir($dir)) !== false)
-		{
-			if ($myfile != '.' && $myfile != '..' && $myfile != 'index.php')
-			{
-				unlink(CACHE_PATH . $myfile);
-			}
-		}
-		closedir($dir);
-	}
-	$ERR = $MSG['30_0033'];
+if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    if (is_dir(MAIN_PATH . 'cache')) {
+        $dir = opendir(MAIN_PATH . 'cache');
+        while (($myfile = readdir($dir)) !== false) {
+            if ($myfile != '.' && $myfile != '..' && $myfile != 'index.php') {
+                unlink(CACHE_PATH . $myfile);
+            }
+        }
+        closedir($dir);
+    }
+
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['cache_cleared']));
 }
 
 $template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : '',
-		'SITEURL' => $system->SETTINGS['siteurl']
-		));
+        'SITEURL' => $system->SETTINGS['siteurl']
+        ));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'clearcache.tpl'
-		));
+        'body' => 'clearcache.tpl'
+        ));
 $template->display('body');
 include 'footer.php';
-?>

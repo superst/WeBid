@@ -6,12 +6,12 @@
 		<div style="width:75%; float:right;">
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0010}&nbsp;&gt;&gt;&nbsp;{L_607}</h4>
-<!-- IF ERROR ne '' -->
-				<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 				<form name="conf" action="" method="post">
 <!-- IF B_PREVIEW -->
-					<div class="main-box">{PREVIEW}</div>
+					<div class="main-box jumbo-box">
+						<h1>{SUBJECT}</h1>
+						{PREVIEW}
+					</div>
 <!-- ENDIF -->
 					<table width="98%" cellpadding="2" align="center" class="blank">
 						<tr valign="top">
@@ -29,7 +29,6 @@
 						<tr valign="top">
 							<td width="175">{L_605}</td>
 							<td style="padding:3px;">
-								{L_30_0055}
 								{EDITOR}
 							</td>
 						</tr>
@@ -37,7 +36,7 @@
 <!-- IF B_PREVIEW -->
 					<span class="smallspan">{L_606}</span>
 					<input type="hidden" name="action" value="submit">
-					<input type="submit" name="act" class="centre" value="{L_007}">
+					<input type="submit" name="act" class="centre" value="{L_398}">
 <!-- ELSE -->
 					<input type="hidden" name="action" value="preview">
 					<input type="submit" name="act" class="centre" value="{L_25_0224}">

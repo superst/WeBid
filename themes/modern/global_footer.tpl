@@ -26,7 +26,7 @@
 			| <a href="{SITEURL}contents.php?show=terms">{L_5086}</a>
 <!-- ENDIF -->
 <!-- IF B_VIEW_COOKIES -->
-			| <a href="{SITEURL}contents.php?show=cookies">{L_1110}</a>
+			| <a href="{SITEURL}contents.php?show=cookies">{L_cookie_policy}</a>
 <!-- ENDIF -->
 		</small>
 		<br>
@@ -44,5 +44,7 @@
 		Powered by <a href="http://www.webidsupport.com/">WeBid</a> &copy; 2008 - {L_COPY_YEAR} <a href="http://www.webidsupport.com/">WeBid</a>
 	</div>
 </div>
+<script src="{SITEURL}js/jquery.lightbox.js"></script>
+<script src="{SITEURL}js/webid.js"></script>
 </body>
 </html>

@@ -7,12 +7,9 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0010}&nbsp;&gt;&gt;&nbsp;{L_525}&nbsp;&gt;&gt;&nbsp;{L_562}</h4>
 				<form name="editadmin" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<table width="98%" cellpadding="0" cellspacing="0" class="blank">
 						<tr>
-							<td>{L_003}</td>
+							<td>{L_username}</td>
 							<td>{USERNAME}</td>
 						</tr>
 						<tr>
@@ -27,7 +24,7 @@
 							<td colspan="2">{L_563}</td>
 						</tr>
 						<tr>
-							<td>{L_004}</td>
+							<td>{L_password}</td>
 							<td><input type="password" name="password" size="25"></td>
 						</tr>
 						<tr>

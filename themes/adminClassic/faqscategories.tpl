@@ -7,9 +7,6 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0018}&nbsp;&gt;&gt;&nbsp;{L_5236}&nbsp;&gt;&gt;&nbsp;{L_5230}</h4>
 				<form name="newfaqcat" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<table width="98%" cellpadding="0" cellspacing="0">
 <!-- IF B_ADDCAT -->
 						<tr bgcolor="#FFFF66">
@@ -32,7 +29,7 @@
 							<th width="14%"><b>{L_008}</b></th>
 						</tr>
 <!-- BEGIN cats -->
-						<tr {cats.BG}>
+						<tr<!-- IF cats.S_ROW_COUNT % 2 == 1 --> class="bg"<!-- ENDIF -->>
 							<td>{cats.ID}</td>
 							<td><a href="editfaqscategory.php?id={cats.ID}">{cats.CATEGORY}</a> <!-- IF cats.FAQS gt 0 -->{cats.FAQSTXT}<!-- ENDIF --></td>
 							<td align="center"><input type="checkbox" name="delete[]" value="{cats.ID}"></td>
@@ -40,7 +37,7 @@
 <!-- END cats -->
 					</table>
 					<input type="hidden" name="csrftoken" value="{_CSRFTOKEN}">
-					<button type="submit" name="action" value="Delete">{L_008}</button>
+					<button type="submit" name="action" value="Delete" class="button">{L_008}</button>
 				</form>
 			</div>
 		</div>

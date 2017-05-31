@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -23,28 +23,30 @@ $db->query($query, $params);
 
 $categories = $db->fetchAll();
 
-foreach ($LANGUAGES as $k => $v)
-{
-	include MAIN_PATH . 'language/' . $k . '/messages.inc.php';
-	include MAIN_PATH . 'language/' . $k . '/categories.inc.php';
-	$cat_strings = [];
-	//build array of category names
-	foreach ($categories as $category)
-	{
-		$cat_strings[$category['cat_id']] = $category_names[$category['cat_id']];
-	}
-	// sort the array
-	asort($cat_strings);
+// move current language to end of array
+unset($LANGUAGES[$language]);
+$LANGUAGES[$language] = $language;
 
-	// build select dropdown
-	$output = "\t" . '<option value="0">' . $MSG['277'] . '</option>' . "\n";
-	$output.= "\t" . '<option value="0">----------------------</option>' . "\n";
-	foreach ($cat_strings as $cat_id => $category_name)
-	{
-		$output .= "\t" . '<option value="' . $cat_id . '">' . $category_name . '</option>' . "\n";
-	}
-	$handle = fopen (MAIN_PATH . 'language/' . $k . '/categories_select_box.inc.php', 'w');
-	fputs($handle, $output);
-	fclose($handle);
+foreach ($LANGUAGES as $k => $v) {
+    include MAIN_PATH . 'language/' . $k . '/messages.inc.php';
+    include MAIN_PATH . 'language/' . $k . '/categories.inc.php';
+    $cat_strings = [];
+    //build array of category names
+    foreach ($categories as $category) {
+        $cat_strings[$category['cat_id']] = $category_names[$category['cat_id']];
+    }
+    // sort the array
+    asort($cat_strings);
+
+    // build select dropdown
+    $output = "\t" . '<option value="0">' . $MSG['277'] . '</option>' . "\n";
+    $output.= "\t" . '<option value="0">----------------------</option>' . "\n";
+    foreach ($cat_strings as $cat_id => $category_name) {
+        $output .= "\t" . '<option value="' . $cat_id . '">' . $category_name . '</option>' . "\n";
+    }
+    $handle = fopen(MAIN_PATH . 'language/' . $k . '/categories_select_box.inc.php', 'w');
+    fputs($handle, $output);
+    fclose($handle);
 }
-?>
+
+$template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['category_table_updated']));

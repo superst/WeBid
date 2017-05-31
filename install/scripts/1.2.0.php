@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -16,12 +16,9 @@ $query = "SELECT * FROM " . $DBPrefix . "settings;";
 $db->direct_query($query);
 $settings_data = $db->result();
 $settings = array_combine(array_keys($settings_data), $settings_data);
-foreach ($settings as $setting_name => $setting_value)
-{
-    switch($setting_name)
-    {
+foreach ($settings as $setting_name => $setting_value) {
+    switch ($setting_name) {
         // str
-        case "cust_increment":
         case "ao_hpf_enabled":
         case "ao_hi_enabled":
         case "ao_bi_enabled":
@@ -29,8 +26,6 @@ foreach ($settings as $setting_name => $setting_value)
         case "extra_cat":
         case "autorelist":
         case "ae_status":
-        case "ao_bi_enabled":
-        case "ao_bi_enabled":
 
             $type = 'str';
             break;
@@ -39,7 +34,6 @@ foreach ($settings as $setting_name => $setting_value)
         case "edit_starttime":
         case "cust_increment":
         case "hours_countdown":
-        case "autorelist_max":
         case "ae_timebefore":
         case "ae_extend":
         case "picturesgallery":
@@ -66,8 +60,7 @@ foreach ($settings as $setting_name => $setting_value)
         $type = 'string';
             break;
     }
-    if ($setting_name == 'timezone')
-    {
+    if ($setting_name == 'timezone') {
         $setting_value = 'Europe/London';
     }
     $query = "INSERT INTO " . $DBPrefix . "settingsv2 (fieldname, fieldtype, value, modifieddate, modifiedby) VALUES
@@ -83,29 +76,24 @@ $query = "RENAME TABLE `" . $DBPrefix . "settingsv2` TO `" . $DBPrefix . "settin
 $db->direct_query($query);
 
 // convert database values to bools
-$query = "SELECT id, bn_only, bold, highlighted, featured, tax, taxinc FROM auctions;";
+$query = "SELECT id, bn_only, bold, highlighted, featured, tax, taxinc FROM " . $DBPrefix . "auctions;";
 $db->direct_query($query);
 $auctions_data = $db->fetchall();
 // convert
-$query = "ALTER TABLE `" . $DBPrefix . "auctions` MODIFY
-        `bn_only` `bn_only` tinyint(1) default 0,
-        `bold` `bold` tinyint(1) default 0,
-        `highlighted` `highlighted` tinyint(1) default 0,
-        `featured` `featured` tinyint(1) default 0,
-        `tax` `tax` tinyint(1) default 0,
-        `taxinc` `taxinc` tinyint(1) default 0;";
+$query = "ALTER TABLE `" . $DBPrefix . "auctions` MODIFY `bn_only` tinyint(1) DEFAULT 0, MODIFY `bold` tinyint(1) DEFAULT 0, MODIFY `highlighted` tinyint(1) DEFAULT 0, MODIFY `featured` tinyint(1) DEFAULT 0, MODIFY `tax` tinyint(1) DEFAULT 0, MODIFY `taxinc` tinyint(1) DEFAULT 0;";
 $db->direct_query($query);
-foreach ($auctions_data as $auction)
-{
-    $query = "UPDATE `" . $DBPrefix . "auctions`
-            SET bn_only = " . intval($auction['bn_only'] == 'y') . ",
-            bold = " . intval($auction['bold'] == 'y') . ",
-            highlighted = " . intval($auction['highlighted'] == 'y') . ",
-            featured = " . intval($auction['featured'] == 'y') . ",
-            tax = " . intval($auction['tax'] == 'y') . ",
-            taxinc = " . intval($auction['taxinc'] == 'y') . ",
-            WHERE id = " . $auction['id'];
-    $db->direct_query($query);
+if (count($auctions_data) > 0) {
+    foreach ($auctions_data as $auction) {
+        $query = "UPDATE `" . $DBPrefix . "auctions`
+                SET bn_only = " . intval($auction['bn_only'] == 'y') . ",
+                bold = " . intval($auction['bold'] == 'y') . ",
+                highlighted = " . intval($auction['highlighted'] == 'y') . ",
+                featured = " . intval($auction['featured'] == 'y') . ",
+                tax = " . intval($auction['tax'] == 'y') . ",
+                taxinc = " . intval($auction['taxinc'] == 'y') . ",
+                WHERE id = " . $auction['id'];
+        $db->direct_query($query);
+    }
 }
 
 // fix payments options

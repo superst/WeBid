@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -18,29 +18,25 @@ include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-unset($ERR);
+if (isset($_POST['action']) && $_POST['action'] == 'update') {
+    // Update database
+    $system->writesetting("buyerprivacy", ynbool($_POST['buyerprivacy']), "str");
 
-if (isset($_POST['action']) && $_POST['action'] == 'update')
-{
-	// Update database
-	$system->writesetting("buyerprivacy",ynbool($_POST['buyerprivacy']), "str");
-	$ERR = $MSG['247'];
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['bidder_privacy_updated']));
 }
 
-loadblock($MSG['237'], $MSG['238'], 'yesno', 'buyerprivacy', $system->SETTINGS['buyerprivacy'], array($MSG['030'], $MSG['029']));
+loadblock($MSG['enable_bidder_privacy'], $MSG['enable_bidder_privacy_explain'], 'yesno', 'buyerprivacy', $system->SETTINGS['buyerprivacy'], array($MSG['yes'], $MSG['no']));
 
 $template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : '',
-		'SITEURL' => $system->SETTINGS['siteurl'],
-		'TYPENAME' => $MSG['25_0008'],
-		'PAGENAME' => $MSG['236'],
-		'B_TITLES' => true
-		));
+        'SITEURL' => $system->SETTINGS['siteurl'],
+        'TYPENAME' => $MSG['25_0008'],
+        'PAGENAME' => $MSG['bidder_privacy'],
+        'B_TITLES' => true
+        ));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'adminpages.tpl'
-		));
+        'body' => 'adminpages.tpl'
+        ));
 $template->display('body');
 include 'footer.php';
-?>

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -18,46 +18,37 @@ include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-unset($ERR);
-
 // Delete boards
-if (isset($_POST['delete']) && is_array($_POST['delete']))
-{
-	foreach ($_POST['delete'] as $k => $v)
-	{
-		$query = "DELETE FROM " . $DBPrefix . "community WHERE id = :id";
-		$params = array(array(':id', $v, 'int'));
-		$db->query($query, $params);
-		$query = "DELETE FROM " . $DBPrefix . "comm_messages WHERE boardid = :id";
-		$params = array(array(':id', $v, 'int'));
-		$db->query($query, $params);
-	}
-	$ERR = $MSG['5044'];
+if (isset($_POST['delete']) && is_array($_POST['delete'])) {
+    foreach ($_POST['delete'] as $k => $v) {
+        $query = "DELETE FROM " . $DBPrefix . "community WHERE id = :id";
+        $params = array(array(':id', $v, 'int'));
+        $db->query($query, $params);
+        $query = "DELETE FROM " . $DBPrefix . "comm_messages WHERE boardid = :id";
+        $params = array(array(':id', $v, 'int'));
+        $db->query($query, $params);
+    }
+
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['boards_removed']));
 }
 
 // get list of boards
 $query = "SELECT * FROM " . $DBPrefix . "community ORDER BY name";
 $db->direct_query($query);
-while ($row = $db->result())
-{
-	$template->assign_block_vars('boards', array(
-			'ID' => $row['id'],
-			'NAME' => $row['name'],
-			'ACTIVE' => $row['active'],
-			'MSGTOSHOW' => $row['msgstoshow'],
-			'MSGCOUNT' => $row['messages']
-			));
+while ($row = $db->fetch()) {
+    $template->assign_block_vars('boards', array(
+            'ID' => $row['id'],
+            'NAME' => $row['name'],
+            'ACTIVE' => $row['active'],
+            'MSGTOSHOW' => $row['msgstoshow'],
+            'MSGCOUNT' => $row['messages']
+            ));
 }
-
-$template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : ''
-		));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'boards.tpl'
-		));
+        'body' => 'boards.tpl'
+        ));
 $template->display('body');
 
 include 'footer.php';
-?>

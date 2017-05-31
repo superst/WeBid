@@ -7,9 +7,6 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0018}&nbsp;&gt;&gt;&nbsp;{L_516}&nbsp;&gt;&gt;&nbsp;{TITLE}</h4>
 				<form name="addnew" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<table width="98%" cellpadding="2" class="blank">
 <!-- BEGIN lang -->
 						<tr valign="top">
@@ -30,7 +27,7 @@
 							<td>&nbsp;</td>
 	<!-- ENDIF -->
 							<td align="right" valign="top"><img src="../images/flags/{lang.LANG}.gif"></td>
-							<td><textarea name="content[{lang.LANG}]" cols="45" rows="20">{lang.CONTENT}</textarea></td>
+							<td>{lang.CONTENT}</td>
 						</tr>
 <!-- END lang -->
 						</tr>
@@ -38,8 +35,8 @@
 							<td align="right">{L_521}</td>
 							<td>&nbsp;</td>
 							<td>
-								<input type="radio" name="suspended" value="0"<!-- IF B_ACTIVE --> checked="checked"<!-- ENDIF -->> {L_030}
-								<input type="radio" name="suspended" value="1"<!-- IF B_INACTIVE --> checked="checked"<!-- ENDIF -->> {L_029}
+								<input type="radio" name="suspended" value="0"<!-- IF B_ACTIVE --> checked="checked"<!-- ENDIF -->> {L_yes}
+								<input type="radio" name="suspended" value="1"<!-- IF B_INACTIVE --> checked="checked"<!-- ENDIF -->> {L_no}
 							</td>
 						</tr>
 					</table>

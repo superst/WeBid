@@ -7,9 +7,6 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_5142}&nbsp;&gt;&gt;&nbsp;{L_276}&nbsp;&gt;&gt;&nbsp;{L_132}</h4>
 				<form name="errorlog" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<div class="plain-box">
 						<p>{L_161}</p>
 <!-- BEGIN langs -->
@@ -22,7 +19,7 @@
 						<th><b>{L_772}</b></th>
 					</tr>
 <!-- BEGIN cats -->
-					<tr {cats.BG}>
+					<tr<!-- IF cats.S_ROW_COUNT % 2 == 1 --> class="bg"<!-- ENDIF -->>
 						<td><input type="text" name="categories_o[]" value="{cats.CAT_NAME}" size="45" disabled></td>
 						<td><input type="text" name="categories[{cats.CAT_ID}]" value="{cats.TRAN_CAT}" size="45"></td>
 					</tr>

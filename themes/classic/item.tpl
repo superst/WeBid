@@ -4,8 +4,7 @@ $(document).ready(function() {
 	var currenttime = '{ENDS_IN}';
 	function padlength(what)
 	{
-		var output=(what.toString().length == 1)? '0' + what : what;
-		return output;
+		return (what.toString().length == 1)? '0' + what : what;
 	}
 	function displaytime()
 	{
@@ -118,7 +117,7 @@ $(document).ready(function() {
 																<a href="{SITEURL}profile.php?user_id={high_bidders.BUYER_ID}&auction_id={ID}"><b>{high_bidders.BUYER_NAME}</b></a>
 																<b>(<a href="{SITEURL}feedback.php?id={high_bidders.BUYER_ID}&faction=show">{high_bidders.BUYER_FB}</a>)</b>
 		<!-- ENDIF -->
-																{high_bidders.BUYER_FB_ICON}
+																<img src="{SITEURL}images/icons/{high_bidders.BUYER_FB_ICON}" alt="{high_bidders.BUYER_FB_ICON}" class="fbstar">
 															</p>
 	<!-- END high_bidders -->
 														</td>
@@ -204,7 +203,7 @@ $(document).ready(function() {
 								<td class="table2" style="padding:10px;">
 									<a href='{SITEURL}profile.php?user_id={SELLER_ID}&auction_id={ID}'><b>{SELLER_NICK}</b></a>
 									(<a href='{SITEURL}feedback.php?id={SELLER_ID}&faction=show'>{SELLER_TOTALFB}</a>)
-									{SELLER_FBICON}
+									<!-- IF SELLER_FB_ICON ne '' --><img src="{SITEURL}images/icons/{SELLER_FB_ICON}" alt="{SELLER_FB_ICON}" class="fbstar"><!-- ENDIF -->
 								</td>
 							</tr>
 							<tr>
@@ -269,6 +268,7 @@ $(document).ready(function() {
 							<p><a href="{SITEURL}user_login.php?">{L_221}</a></p>
 <!-- ENDIF -->
 						</div>
+						<a class="report-item rightside" href='{SITEURL}item_report.php?id={ID}'>{L_report_this_item}</a>
 					</td>
 				</tr>
 			</table>
@@ -306,17 +306,12 @@ $(document).ready(function() {
 	<!-- BEGIN gallery -->
 							<td>
 								<a href="{SITEURL}{UPLOADEDPATH}{ID}/{gallery.V}" title="" data-lightbox="gallery">
-									<img src="{SITEURL}getthumb.php?w={THUMBWIDTH}&fromfile={UPLOADEDPATH}{ID}/{gallery.V}" border="0" width="{THUMBWIDTH}" hspace="10">
+									<img src="{SITEURL}getthumb.php?w={THUMBWIDTH}&fromfile={UPLOADEDPATH}{ID}/{gallery.V}" border="0" hspace="10">
 								</a>
 							</td>
 	<!-- END gallery -->
 						</tr>
 					</table>
-					<script type="text/javascript">
-						$(function() {
-							$('#gallery a').lightBox();
-						});
-					</script>
 				</div>
 			</div>
 <!-- ENDIF -->
@@ -369,8 +364,8 @@ $(document).ready(function() {
 					<td>
 						<div class="tableContent2">
 							<div class="table2">
-<!-- IF COUNTRY ne '' or ZIP ne '' -->
-								<b>{L_014}:</b> {COUNTRY} ({ZIP})<br>
+<!-- IF CITY ne '' or COUNTRY ne '' or ZIP ne '' -->
+								<b>{L_014}:</b> <!-- IF CITY ne '' -->{CITY}<!-- ENDIF --> <!-- IF COUNTRY ne '' -->{COUNTRY}<!-- ENDIF --> <!-- IF ZIP ne '' -->({ZIP})<!-- ENDIF --><br>
 <!-- ENDIF -->
 <!-- IF B_SHIPPING -->
 								<b>{L_025}:</b> {SHIPPING}, {INTERNATIONAL}<br>

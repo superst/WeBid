@@ -7,14 +7,16 @@
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_5142}&nbsp;&gt;&gt;&nbsp;{L_276}&nbsp;&gt;&gt;&nbsp;{L_078}</h4>
 				<form name="newcat" action="" method="post">
-<!-- IF ERROR ne '' -->
-					<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 					<div class="plain-box">{L_845}</div>
 					<table width="98%" cellpadding="0" cellspacing="0" class="blank">
 						<tr>
 							<td width="10" height="21">&nbsp;</td>
-							<td colspan="4" height="21">{CRUMBS}</td>
+							<td colspan="4" height="21">
+<!-- BEGIN crumbs -->
+								<!-- IF crumbs.S_ROW_COUNT gt 0 --> > <!-- ENDIF -->
+								<a href="categories.php?parent={crumbs.CAT_ID}">{crumbs.CAT_NAME}</a>
+<!-- END crumbs -->
+							</td>
 						</tr>
 						<tr>
 							<th width="10">&nbsp;</th>
@@ -34,10 +36,10 @@
 							<td valign="middle">
 								<input type="checkbox" name="delete[]" value="{cats.CAT_ID}">
 	<!-- IF cats.B_SUBCATS -->
-								<img src="{SITEURL}themes/admin/images/bullet_blue.png">
+								<img src="{SITEURL}themes/{THEME}/images/bullet_blue.png">
 	<!-- ENDIF -->
 	<!-- IF cats.B_AUCTIONS -->
-								<img src="{SITEURL}themes/admin/images/bullet_red.png">
+								<img src="{SITEURL}themes/{THEME}/images/bullet_red.png">
 	<!-- ENDIF -->
 							</td>
 						</tr>

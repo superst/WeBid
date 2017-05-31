@@ -2,7 +2,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#qty").keyup(function(){
-		$("#bidcost").html((parseFloat(($("#qty").val()) * ($("#bid").val()))).toFixed(2) + ">{CURRENCY}</a>");;
+		$("#bidcost").html((parseFloat(($("#qty").val()) * ($("#bid").val()))).toFixed(2) + ">{CURRENCY}</a>");
 	});
 	$("#qty").click(function(){
 		$("#bidcost").html((parseFloat(($("#qty").val()) * ($("#bid").val()))).toFixed(2) + ">{CURRENCY}</a>");
@@ -64,11 +64,11 @@ $(document).ready(function(){
 	<!-- ENDIF -->
 	<!-- IF B_USERAUTH -->
 					<div class="form-group">
-						<label class="col-sm-5 control-label">{L_003}</label>
+						<label class="col-sm-5 control-label">{L_username}</label>
 						<div class="col-sm-7"><p class="form-control-static">{YOURUSERNAME}</p></div>
 					</div>
 					<div class="form-group">
-						<label class="col-sm-5 control-label">{L_004}</label>
+						<label class="col-sm-5 control-label">{L_password}</label>
 						<div class="col-sm-7"><input type="password" name="password" class="form-control"  value="">
 						</div>
 					</div>

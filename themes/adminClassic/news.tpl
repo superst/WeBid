@@ -6,9 +6,6 @@
 		<div style="width:75%; float:right;">
 			<div class="main-box">
 				<h4 class="rounded-top rounded-bottom">{L_25_0018}&nbsp;&gt;&gt;&nbsp;{L_516}</h4>
-<!-- IF ERROR ne '' -->
-				<div class="error-box"><b>{ERROR}</b></div>
-<!-- ENDIF -->
 				<div class="plain-box">{NEWS_COUNT}{L_517}</div>
 				<table width="98%" cellpadding="0" cellspacing="0">
 					<tr>
@@ -17,12 +14,12 @@
 						<th>{L_297}</th>
 					</tr>
 <!-- BEGIN news -->
-					<tr {news.BG}>
+					<tr<!-- IF news.S_ROW_COUNT % 2 == 1 --> class="bg"<!-- ENDIF -->>
 						<td>{news.DATE}</td>
 						<td <!-- IF news.SUSPENDED eq 1 -->style="background: #FAD0D0; color: #B01717; font-weight: bold;"<!-- ENDIF -->>{news.TITLE}</td>
 						<td>
 							<a href="editnew.php?id={news.ID}&PAGE={PAGE}">{L_298}</a><br>
-							<a href="deletenew.php?id={news.ID}&PAGE={PAGE}">{L_008}</a>
+							<a href="deletenews.php?id={news.ID}&PAGE={PAGE}">{L_008}</a>
 						</td>
 					</tr>
 <!-- END news -->

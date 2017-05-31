@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- *   copyright				: (C) 2008 - 2016 WeBid
+ *   copyright				: (C) 2008 - 2017 WeBid
  *   site					: http://www.webidsupport.com/
  ***************************************************************************/
 
@@ -18,38 +18,43 @@ include '../common.php';
 include INCLUDE_PATH . 'functions_admin.php';
 include 'loggedin.inc.php';
 
-unset($ERR);
+$type = (isset($_GET['type'])) ? $_GET['type'] : 'distinct';
 
-if (isset($_POST['action']) && $_POST['action'] == 'clearlog')
-{
-	$query = "DELETE FROM " . $DBPrefix . "logs WHERE type = 'error'";
-	$db->direct_query($query);
-	$ERR = $MSG['889'];
+if (isset($_POST['action']) && $_POST['action'] == 'clearlog') {
+    $query = "DELETE FROM " . $DBPrefix . "logs WHERE type = 'error'";
+    $db->direct_query($query);
+
+    $template->assign_block_vars('alerts', array('TYPE' => 'success', 'MESSAGE' => $MSG['error_log_purged']));
 }
 
 $data = '';
-$query = "SELECT * FROM " . $DBPrefix . "logs WHERE type = 'error'";
-$db->direct_query($query);
-while ($row = $db->fetch())
-{
-	$data .= '<strong>' . date('d-m-Y, H:i:s', $row['timestamp'] + $system->tdiff) . '</strong>: ' . $row['message'] . '<br>';
+if ($type == 'distinct') {
+    $query = "SELECT DISTINCT(message) FROM " . $DBPrefix . "logs WHERE type = 'error'";
+    $db->direct_query($query);
+    while ($row = $db->fetch()) {
+        $data .= $row['message'] . '<br>';
+    }
+} else {
+    $query = "SELECT * FROM " . $DBPrefix . "logs WHERE type = 'error'";
+    $db->direct_query($query);
+    while ($row = $db->fetch()) {
+        $data .= '<strong>' . $dt->printDateTz($row['timestamp']) . '</strong>: ' . $row['message'] . '<br>';
+    }
 }
 
-if ($data == '')
-{
-	$data = $MSG['888'];
+if ($data == '') {
+    $data = $MSG['error_log_empty'];
 }
 
 $template->assign_vars(array(
-		'ERROR' => (isset($ERR)) ? $ERR : '',
-		'SITEURL' => $system->SETTINGS['siteurl'],
-		'ERRORLOG' => $data
-		));
+        'SITEURL' => $system->SETTINGS['siteurl'],
+        'TYPE' => $type,
+        'ERRORLOG' => $data
+        ));
 
 include 'header.php';
 $template->set_filenames(array(
-		'body' => 'errorlog.tpl'
-		));
+        'body' => 'errorlog.tpl'
+        ));
 $template->display('body');
 include 'footer.php';
-?>
